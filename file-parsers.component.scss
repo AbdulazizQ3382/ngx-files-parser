@@ -1,0 +1,15 @@
+.scrollable-table {
+    height:500px!important;
+    overflow-y: scroll;
+    overflow-x: scroll;
+  }
+  table {
+    display: block;
+    font-size: 15px;
+    white-space: nowrap;
+  
+    th,td {
+      padding-right: 49px;
+    }
+  }
+  

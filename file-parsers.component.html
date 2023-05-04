@@ -1,23 +1,54 @@
 
-<label>
-  parse csv
-</label>
-<input type="file" (input)="parseCsv($event)">
+<div class="card-table table-responsive scrollable-table w-50">
+  <table class="table-vcenter">
+    <thead>
+    <tr>
+      <th *ngFor="let column of this.extractColumns(toArray(this.xmlJsonSet))">{{column}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let row of this.xmlJsonSet">
+      <td *ngFor="let field of getObjectValues(row)">
+        {{field}}
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
 <hr>
+<div class="card-table table-responsive scrollable-table w-50">
+  <table class="table-vcenter">
+    <thead>
+    <tr>
+      <th *ngFor="let column of this.extractColumns(this.xlsxJson)">{{column}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let row of this.xlsxJson">
+      <td *ngFor="let field of getObjectValues(row)">
+        {{field}}
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<hr>
+<div class="card-table table-responsive scrollable-table w-50">
+  <table class="table-vcenter">
+    <thead>
+    <tr>
+      <th *ngFor="let column of this.extractColumns(this.csvJson)">{{column}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let row of this.csvJson">
+      <td *ngFor="let field of getObjectValues(row)">
+        {{field}}
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
 
-<label>
-  parse xsls
-</label>
-<input type="file" (input)="parseXlsx($event)">
-<hr>
 
-<label>
-  parse xml
-</label>
-<input type="file" (input)="parseXml($event)">
-<hr>
-<label>
-  parse json
-</label>
-<input type="file" (input)="parseCsv($event)">
-<hr>
+
