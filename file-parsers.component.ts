@@ -1,21 +1,16 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {parseString} from "xml2js";
 import {NgxCsvParser, NgxCSVParserError} from "ngx-csv-parser";
 import * as XLSX from "xlsx";
+import {FileMetaData} from "../types/FileMetaData";
 
-
-type FileMetaData = {
-  fileUrl : string,
-  fileExtension : string
-
-}
 
 @Component({
   selector: 'app-file-parsers',
   templateUrl: './file-parsers.component.html',
   styleUrls: ['./file-parsers.component.scss']
 })
-export class FileParsersComponent  implements OnInit {
+export class FileParsersComponent  implements OnChanges {
 
   arrayBuffer:any;
   xmlJsonSet! : Set<any>
@@ -25,28 +20,30 @@ export class FileParsersComponent  implements OnInit {
 
   @Input('file') file? : File
 
-  @Input('fileMetaData') fileMetaData? : FileMetaData;
+  @Input('fileMetaData') fileMetaData : FileMetaData;
 
 
   constructor(private ngxCsvParser: NgxCsvParser) {
+    this.fileMetaData = {fileUrl : '', fileExtension : ''};
   }
 
-  ngOnInit(): void {
-    this.xmlJsonSet = new Set<any>();
-    console.log(this.fileMetaData?.fileUrl);
-    if(this.fileMetaData?.fileUrl)
+  ngOnChanges(): void {
+    this.clean();
+    if(this.fileMetaData?.fileUrl) {
       this.getFileFromUrl()?.then(res => res.blob()) // Gets the response and returns it as a blob
         .then(blob => {
-          console.log(blob);
-          this.file = new File([blob], blob.name);
+          const fileUrlSplit = this.fileMetaData.fileUrl.split('/');
+          const fileName = fileUrlSplit[fileUrlSplit.length-1];
+          this.file = new File([blob], fileName);
           this.parseFile(this.fileMetaData?.fileExtension || '');
         });
-
-    this.parseFile(this.file?.type || '');
+    }
+    if(this.file)
+      this.parseFile(this.file?.type || '');
   }
 
-
   parseCsv(csvFile : File) {
+    console.log(csvFile)
     this.ngxCsvParser.parse(csvFile, {header: true, delimiter:',', encoding: 'utf8'})
       .pipe().subscribe({
       next: (result): void => {
@@ -61,7 +58,6 @@ export class FileParsersComponent  implements OnInit {
   parseXml(xmlFile : File) {
 
     let fileReader = new FileReader();
-
 
     fileReader.onload = (e) => {
       this.arrayBuffer = fileReader.result;
@@ -109,8 +105,6 @@ export class FileParsersComponent  implements OnInit {
 
   parseFile(fileType : string){
     if(this.file) {
-      console.log(this.file)
-      console.log(fileType);
       switch (fileType) {
         case 'csv':
           this.parseCsv(this.file);
@@ -145,5 +139,9 @@ export class FileParsersComponent  implements OnInit {
       return fetch(this.fileMetaData?.fileUrl)
     return null;
   }
-
+  clean() {
+    this.xmlJsonSet = new Set<any>();
+    this.xlsxJson = []
+    this.csvJson = []
+  }
 }

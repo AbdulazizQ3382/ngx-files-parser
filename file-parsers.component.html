@@ -1,5 +1,5 @@
 
-<div class="card-table table-responsive scrollable-table w-50">
+<div class="card-table table-responsive scrollable-table w-50" [ngClass]="xmlJsonSet.size===0?'d-none':'d-block'">
   <table class="table-vcenter">
     <thead>
     <tr>
@@ -15,8 +15,7 @@
     </tbody>
   </table>
 </div>
-<hr>
-<div class="card-table table-responsive scrollable-table w-50">
+<div class="card-table table-responsive scrollable-table w-50" [ngClass]="xlsxJson.length===0?'d-none':'d-block'">
   <table class="table-vcenter">
     <thead>
     <tr>
@@ -32,8 +31,7 @@
     </tbody>
   </table>
 </div>
-<hr>
-<div class="card-table table-responsive scrollable-table w-50">
+<div class="card-table table-responsive scrollable-table w-50" [ngClass]="csvJson.length===0?'d-none':'d-block'">
   <table class="table-vcenter">
     <thead>
     <tr>
